@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>МГТУ Станкин</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    html { font-family: Helvetica; display: inline-block; margin: 80px auto; text-align: center;}
+    button { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background-color: #4CAF50;
+    border: none; color: white; padding: 180px 280px; text-decoration: none; font-size: 260px; margin: 10px; cursor: pointer;}
+    button {background-color: #574f4f;}
+    body    { text-align: center; font-family: "Trebuchet MS", "Times new roman"; margin: 80% auto;}
+    input[type=range] { height: 80px; width: 70%; }
+    body  {background-image: url('https://s.rbk.ru/v1_companies_s3/resized/1200xH/media/trademarks/831721be-5d49-4525-a2a2-6d88f5dc25d9.jpg'); }
+  </style>
+</head>
+<body>
+  <h1><b>STANKIN</b></h1>
+  <h2><b>MANIPULYATOR</b></h2>
+  <form method="POST" action="http://192.168.81.102/D:/index.html">
+    ESP8266 IP Address:
+    <input type="text" name="inputbox" value="192.168.81.102">
+  </form>
+  <div class="slider-container">
+    <label for="pos1">Servo 1: <span id="pos1-value"></span></label>
+    <input type="range" min="0" max="180" value="90" class="slider" id="pos1">
+    <label for="pos2">Servo 2: <span id="pos2-value"></span></label>
+    <input type="range" min="0" max="180" value="90" class="slider" id="pos2">
+    <label for="pos3">Servo 3: <span id="pos3-value"></span></label>
+    <input type="range" min="0" max="180" value="90" class="slider" id="pos3">
+    <label for="pos4">Servo 4: <span id="pos4-value"></span></label>
+    <input type="range" min="0" max="180" value="90" class="slider" id="pos4">
+    <label for="pos5">Servo 5: <span id="pos5-value"></span></label>
+    <input type="range" min="0" max="180" value="90" class="slider" id="pos5">
+    <label for="pos6">Servo 6: <span id="pos6-value"></span></label>
+    <input type="range" min="0" max="180" value="90" class="slider" id="pos6">
+    
+    
+    <script>
+      // update servo position values when sliders are moved
+      var slider1 = document.getElementById("pos1");
+      var output1 = document.getElementById("pos1-value");
+      output1.innerHTML = slider1.value;
+      slider1.oninput = function() {
+      output1.innerHTML = this.value;
+      sendData(); // send updated servo positions to ESP8266
+      }
+      var slider2 = document.getElementById("pos2");
+      var output2 = document.getElementById("pos2-value");
+      output2.innerHTML = slider2.value;
+      slider2.oninput = function() {
+        output2.innerHTML = this.value;
+        sendData(); // send updated servo positions to ESP8266
+      }
+    
+      var slider3 = document.getElementById("pos3");
+      var output3 = document.getElementById("pos3-value");
+      output3.innerHTML = slider3.value;
+      slider3.oninput = function() {
+        output3.innerHTML = this.value;
+        sendData(); // send updated servo positions to ESP8266
+      }
+    
+      var slider4 = document.getElementById("pos4");
+      var output4 = document.getElementById("pos4-value");
+      output4.innerHTML = slider4.value;
+      slider4.oninput = function() {
+        output4.innerHTML = this.value;
+        sendData(); // send updated servo positions to ESP8266
+      }
+    
+      var slider5 = document.getElementById("pos5");
+      var output5 = document.getElementById("pos5-value");
+      output5.innerHTML = slider5.value;
+      slider5.oninput = function() {
+        output5.innerHTML = this.value;
+        sendData(); // send updated servo positions to ESP8266
+      }
+    
+      var slider6 = document.getElementById("pos6");
+      var output6 = document.getElementById("pos6-value");
+      output6.innerHTML = slider6.value;
+      slider6.oninput = function() {
+        output6.innerHTML = this.value;
+        sendData(); // send updated servo positions to ESP8266
+      }
+    </script>
+    
+    <!-- Add button to center the sliders -->
+    <button onclick="window.scrollTo(0, 0)">Center Sliders</button>
+    
+    <script>
+      // function to center the sliders
+      function centerSliders() {
+      // set slider values to 90 degrees
+      slider1.value = 90;
+      slider2.value = 90;
+      slider3.value = 90;
+      slider4.value = 90;
+      slider5.value = 90;
+      slider6.value = 90;
+      // update slider position values on webpage
+      output1.innerHTML = 90;
+      output2.innerHTML = 90;
+      output3.innerHTML = 90;
+      output4.innerHTML = 90;
+      output5.innerHTML = 90;
+      output6.innerHTML = 90;
+
+      sendData(); // send updated servo positions to ESP8266
+     }
+
+      // function to send servo positions to ESP8266
+      function sendData() {
+       var xmlhttp = new XMLHttpRequest(); // create new xmlhttp object
+       xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(this.responseText); // print response from ESP8266 to console
+      }
+     };
+     xmlhttp.open("GET", "http://" + document.form.inputbox.value + "/?" + "pos1=" + slider1.value +
+                                            "&pos2=" + slider2.value +
+                                            "&pos3=" + slider3.value +
+                                            "&pos4=" + slider4.value +
+                                            "&pos5=" + slider5.value +
+                                            "&pos6=" + slider6.value, true);
+    xmlhttp.send(); // send GET request to ESP8266 with updated servo positions
+  }
+</script>
+    </body>
+    </html>
