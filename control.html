@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="jquery.js"></script>
+    <body>
+        <h1> <b> STANKIN </b> </h1>
+        <h2> <b> MANIPULYATOR </b> </h2>
+        <body id="myBody"></body>
+    </body>
+  <title>МГТУ Станкин</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <link rel="icon" href="data:,">
+  <style>
+    /* Styles for sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none; 
+      margin: 10px;
+      width: 80%;
+      height: 10px;
+      background: #201093;
+      outline: none;
+      opacity: 0.5;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      text-align: center;
+      font-family: "Trebuchet MS", "Times new roman";
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #225a0c;
+      cursor: pointer;
+    }
+    input[type="range"]::-moz-range-thumb {
+      text-align: center;
+      font-family: "Trebuchet MS", "Times new roman";
+      width: 30px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+    }
+    body  {background-image: url('https://info.stankin.ru/build/images/courses/logo.b1f7225f.png'); }
+    body {background-size: 100%;}
+    body { text-align: center;  color: rgb(8, 0, 0); font-family: "Trebuchet MS", "Times new roman"; margin: left 100%; margin: high 100%; margin-top: 0%; }
+    
+  </style>
+</head>
+<body>
+  <form id="control-form" method="POST">
+    <br>
+    <label for="mode">Режим:</label>
+    <select id="mode" name="mode" required>
+      <option value="manual">вручную</option>
+      <option value="automatic">автоматический</option>
+    </select>
+    <br>
+    <div id="sliders">
+      <h2>Серво 1: <span id="xPos"></span></h2>
+      <input type="range" min="0" max="360" value="180" class="slider" id="xSlider" onchange="servo(xS.value,yS.value,zS.value,gS.value)"/>
+      <h2>Серво 2: <span id="yPos"></span></h2>
+      <input type="range" min="0" max="180" value="90" class="slider" id="ySlider" onchange="servo(xS.value,yS.value,zS.value,gS.value)"/>
+      <h2>Серво 3: <span id="zPos"></span></h2>
+      <input type="range" min="-90"  max="90" value="0" class="slider" id="zSlider" onchange="servo(xS.value,yS.value,zS.value,gS.value)"/>
+      <h2>Серво 4: <span id="dPos"></span></h2>
+      <input type="range" min="0" max="360" value="180" class="slider" id="dSlider" onchange="servo(xS.value,yS.value,zS.value,gS.value)"/>
+      <h2>Серво 5: <span id="fPos"></span></h2>
+      <input type="range" min="0" max="360" value="180" class="slider" id="fSlider" onchange="servo(xS.value,yS.value,zS.value,gS.value)"/>
+      <h2>Захват   : <span id="gPos"></span></h2>
+      <input type="range" min="-1" max="1" value="0" class="slider" id="gSlider" onchange="servo(xS.value,yS.value,zS.value,gS.value)"/>     
+      </div>    
+    </br>
+    <br>
+      <script>
+        var xS = document.getElementById("xSlider");
+        var xP = document.getElementById("xPos"); xP.innerHTML = xS.value;            
+        var yS = document.getElementById("ySlider");            
+        var yP = document.getElementById("yPos"); yP.innerHTML = yS.value;            
+        var zS = document.getElementById("zSlider");
+        var zP = document.getElementById("zPos"); zP.innerHTML = zS.value;   
+        var gS = document.getElementById("gSlider");
+        var gP = document.getElementById("gPos"); gP.innerHTML = gS.value;            
+        var dS = document.getElementById("dSlider");
+        var dP = document.getElementById("dPos"); dP.innerHTML = dS.value;
+        var fS = document.getElementById("fSlider");
+        var fP = document.getElementById("fPos"); fP.innerHTML = fS.value;
+
+        xS.oninput = function() { xP.innerHTML = xS.value; }
+        yS.oninput = function() { yP.innerHTML = yS.value; }
+        zS.oninput = function() { zP.innerHTML = zS.value; }
+        gS.oninput = function() { gP.innerHTML = gS.value; }            
+        dS.oninput = function() { dP.innerHTML = dS.value; }
+        fS.oninput = function() { fP.innerHTML = fS.value; }
+         $.ajaxsetup({timeout:1000}); 
+        function servo(pos_x,pos_y,pos_z,pos_g,pos_d,pos_f) {
+          $.get("/?value=" + pos_x + "X" + pos_y + "Y" + pos_z + "Z" + pos_d + "D" + pos_f + "F" + pos_g + "L&");
+        {Connection: close};}
+      
+      </script>
+      </form>
+  
+    <input type="submit" value="Отправить">
+  </form>
+  <script>
+    
+    const modeSelect = document.getElementById("mode");
+    const sliders = document.getElementById("sliders");
+    modeSelect.addEventListener("change", function() {
+      if (modeSelect.value === "manual") {
+        sliders.style.display = "block";
+      } else {
+        sliders.style.display = "none";
+}
+});
+
+// Submit form data to server
+const form = document.getElementById("control-form");
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  const formData = new FormData(form);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/control");
+  xhr.onload = function() {
+    console.log(xhr.responseText);
+  };
+  xhr.send(formData);
+});
+       function changeMode() {
+        var modeSelect = document.getElementById("mode-select");
+        var selectedMode = modeSelect.options[modeSelect.selectedIndex].value;
+
+        if (selectedMode === "автоматический") {
+         document.body.style.backgroundImage = "url('https://thumbs.dreamstime.com/z/предохранение-от-цифров-и-виртуальное-пространство-безопасностью-114136261.jpg')";
+        }
+      }
+  </script>
+</body>
+</html>
